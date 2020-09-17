@@ -44,4 +44,36 @@ router.post('/signup', (req, res) => {
     })
 })
 
+
+router.post('/login', (req, res)=> {
+    const {error, isValid} = validateLogin(req.body)
+    if(!isValid) {
+        res.status(400).send(error)
+    }
+
+    const {email, password} = req.body
+
+    User.findOne({email})
+        .then(user => {
+            if(!user) {
+                res.status(400).json({msg: 'user not exist'})
+            }
+
+            bcrypt.compare(password, user.password)
+                .then(isMatch => {
+                    if (!isMatch) {
+                        res.status(400).json({msg: 'Password does not match'})
+                    }
+                    payload = {id: user.id};
+
+                    jwt.sign(payload, keys.secretOrKey, {expireIn: 3600}, (err, token) => {
+                        res.json({
+                            success: true,
+                            token: 'Bear ' + token
+                        });
+                    });
+                });
+        });
+});
+
 module.exports = router
