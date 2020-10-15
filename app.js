@@ -12,7 +12,7 @@ mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=> console.log('Connect to Mongodb Successfully'))
 .catch(err=>console.log(err))
 
-app.get("/", (req, res) => res.send("Hello World"));
+app.get("/", (req, res) => res.send("Hello Techo"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
