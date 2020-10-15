@@ -64,16 +64,24 @@ router.post('/login', (req, res)=> {
                     if (!isMatch) {
                         res.status(400).json({msg: 'Password does not match'})
                     }
-                    payload = {id: user.id};
+                    payload = {id: user.id}
+                    console.log(payload)
 
-                    jwt.sign(payload, keys.secretOrKey, {expireIn: 3600}, (err, token) => {
+                    jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+                        console.log(token)
                         res.json({
                             success: true,
                             token: 'Bear ' + token
-                        });
-                    });
-                });
-        });
-});
+                        })
+                    })
+                })
+        })
+})
+
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res)=> {
+    res.json({
+        id: req.user.id
+    })
+})
 
 module.exports = router
